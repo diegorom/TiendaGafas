@@ -11,7 +11,7 @@ public class Conexion {
     public static boolean conectar(String host, String usuario, String pass) {        
         try {
             conexion = DriverManager.getConnection(
-                    "jdbc:mysql://"+host+"/childout",
+                    "jdbc:mysql://"+host+"/tiendagafas",
                     usuario, pass);
             return true;
         } catch (Exception e) {

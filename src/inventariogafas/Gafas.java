@@ -19,7 +19,7 @@ public class Gafas {
     int idGafas;
     String tipo;
     
-    Gafas(String modelo, String marca, int precio, String color, String genero, String material, String forma, int idGafas, String tipo){
+    Gafas(int idGafas, String modelo, String marca, int precio, String color, String genero, String material, String forma, String tipo){
     this.modelo=modelo;
     this.marca=marca; 
     this.precio=precio; 
