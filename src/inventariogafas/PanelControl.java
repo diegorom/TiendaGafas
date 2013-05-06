@@ -4,7 +4,11 @@
  */
 package inventariogafas;
 
+import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -16,19 +20,54 @@ public class PanelControl extends javax.swing.JPanel {
      * Creates new form PanelControl
      */
     Gafas gafa;
-    Conexion conecion;
-    GestionGafas gestion;
+    Conexion conexion = new Conexion();
+    GestionGafas gestion = new GestionGafas();
+    DefaultTableModel modeloTabla;
     
+    void CargarDatosJTable() {
+        gestion.selecGafas(); 
+        ArrayList<Gafas> listaGafas = new ArrayList();
+        modeloTabla = new DefaultTableModel() {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }                
+        };
+        jTable1.setModel(modeloTabla);
+
+        //Rellenar las cabeceras de las columnas
+        String[] cabecera = {"IdGafas","Modelo","Marca","Precio","Color","Genero","Material","Forma","Tipo"};
+        modeloTabla.setColumnIdentifiers(cabecera);
+
+        listaGafas = gestion.selecGafas(); 
+        //Recorrer la lista de contactos para añadir algunos datos en el JTable
+        for (Gafas nueva :listaGafas) {
+            //Se va mostrar sólo el nombre y los apellidos
+            String[] datosFilaContacto = {
+                String.valueOf(nueva.getIdGafas()), 
+                nueva.getModelo(),
+                nueva.getMarca(),
+                String.valueOf(nueva.getPrecio()), 
+                nueva.getColor(),
+                nueva.getGenero(),
+                nueva.getMaterial(),
+                nueva.getForma(),
+                nueva.getTipo()};
+            modeloTabla.addRow(datosFilaContacto);
+        }        
+
+        //Establecer que sólo se pueda seleccionar una fila
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //Ocultar columna de idContacto
+        TableColumn tc = jTable1.getColumn("IdGafas");
+        jTable1.removeColumn(tc);
+               
+    }
     public PanelControl() {
         initComponents();
         if (!java.beans.Beans.isDesignTime()) {
-            conecion.conectar("localhost", "root", "");
-            DefaultListModel listModel = new DefaultListModel();
-            for (int i = 0; i < gestion.selecGafas().size(); i++) {
-                listModel.add(i, gestion.selecGafas().get(i));
-                System.out.println("Recorre la lista: " + i);
-            }
-            jList1.setModel(listModel);
+            conexion.conectar("localhost", "root", "");
+            this.CargarDatosJTable();
         }
     }
         
@@ -42,15 +81,21 @@ public class PanelControl extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -58,19 +103,19 @@ public class PanelControl extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(355, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList jList1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

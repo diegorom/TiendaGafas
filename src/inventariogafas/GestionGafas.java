@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class GestionGafas {
     Gafas gafa;
-    Conexion conecion;
+    Conexion conexion;
     
     boolean delete(Gafas gafa){
         this.gafa=gafa;
@@ -68,7 +68,7 @@ public class GestionGafas {
         ArrayList<Gafas> gafas = new ArrayList();
         try {
             Statement stmt = Conexion.conexion.createStatement();
-            String sql = "SELECT * FROM gafas";
+            String sql = "SELECT id_gafas,modelo,marca,precio,color,genero,material,forma,tipo FROM gafas";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 int idGafas = rs.getInt("id_gafas");
