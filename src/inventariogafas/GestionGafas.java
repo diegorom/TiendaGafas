@@ -80,7 +80,7 @@ public class GestionGafas {
                 String material = rs.getString("material");
                 String forma = rs.getString("forma");
                 String tipo = rs.getString("tipo");
-                Gafas NewGafa = new Gafas(idGafas,"modelo", "marca",precio,"color","genero","material","forma","tipo");
+                Gafas NewGafa = new Gafas(idGafas,modelo,marca,precio,color,genero,material,forma,tipo);
                 gafas.add(NewGafa);
             }
         } catch (SQLException ex) {

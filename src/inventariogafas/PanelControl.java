@@ -22,6 +22,7 @@ public class PanelControl extends javax.swing.JPanel {
     public PanelControl() {
         initComponents();
         if (!java.beans.Beans.isDesignTime()) {
+            conecion.conectar("localhost", "root", "");
             DefaultListModel listModel = new DefaultListModel();
             for (int i = 0; i < gestion.selecGafas().size(); i++) {
                 listModel.add(i, gestion.selecGafas().get(i));
