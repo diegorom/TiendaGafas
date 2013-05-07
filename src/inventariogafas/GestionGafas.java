@@ -105,4 +105,28 @@ public class GestionGafas {
         }
         return marca;
     }
+        public Gafas selecGafaById(int id) {
+        Gafas NewGafa = null;
+        try {
+            Statement stmt = Conexion.conexion.createStatement();
+            String sql = "SELECT * FROM gafas where id_gafas="+id;
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int idGafas = rs.getInt("id_gafas");
+                String modelo = rs.getString("modelo");
+                String marca = rs.getString("marca");
+                int precio = rs.getInt("precio");
+                String color = rs.getString("color");
+                String genero = rs.getString("genero");
+                String material = rs.getString("material");
+                String forma = rs.getString("forma");
+                String tipo = rs.getString("tipo");
+                NewGafa = new Gafas(idGafas,modelo,marca,precio,color,genero,material,forma,tipo);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al consultar la base de datos");
+            ex.printStackTrace();
+        }
+        return NewGafa;
+    }
 }
