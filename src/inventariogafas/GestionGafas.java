@@ -129,4 +129,11 @@ public class GestionGafas {
         }
         return NewGafa;
     }
+        void setGafaByGafa(Gafas gafa){
+        }
+        
+        public Gafas getGafaByGafa(){
+            return gafa;
+        }
+        
 }
