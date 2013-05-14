@@ -38,7 +38,16 @@ public class GestionGafas {
         try {
             
             Statement stmt = Conexion.conexion.createStatement();
-            String sql = "UPDATE gafas SET " + gafa.getIdGafas()+gafa.getModelo()+gafa.getMarca()+gafa.getPrecio()+gafa.getColor()+gafa.getGenero()+gafa.getMaterial()+gafa.getForma()+gafa.getTipo();
+            String sql = "UPDATE gafas SET " 
+                    + "modelo = '" + gafa.getModelo() + "', "
+                    + "marca = '" + gafa.getMarca() + "', "
+                    + "precio = " + gafa.getPrecio() + ", "
+                    + "color = '" + gafa.getColor() + "', "
+                    + "genero = '" + gafa.getGenero() + "', "
+                    + "material = '" + gafa.getMaterial() + "', "
+                    + "forma = '" + gafa.getForma() + "', "
+                    + "tipo = '" + gafa.getTipo() + "' "
+                    + "WHERE id_gafas = " + gafa.getIdGafas();
             stmt.executeUpdate(sql);
 
         } catch (SQLException ex) {

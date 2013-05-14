@@ -4,6 +4,7 @@
  */
 package inventariogafas;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -16,19 +17,66 @@ public class Administracion extends javax.swing.JDialog {
      * Creates new form Administracion
      */
     JPanel PanelControl = new JPanel();
-    GestionGafas gestion;
-   /* void mostrarDatosContacto() {
-            Gafas gafa = gestion.getGafaByGafa();
-            jLabelModelo.setText(gafa.getModelo());
-            jLabelMarca.setText(gafa.getMarca());
-            jLabelPrecio.setText(""+gafa.getPrecio());
-            jLabelColor.setText(gafa.getColor()); 
-            jLabelGenero.setText(gafa.genero); 
-            jLabelMaterial.setText(gafa.material); 
-            jLabelForma.setText(gafa.forma); 
-            jLabelTipo.setText(gafa.getTipo()); 
+    GestionGafas gestion = new GestionGafas();
+    Gafas gafa = new Gafas();
+    private boolean hayCambios = false;
+    private boolean aceptado = false;
 
-    }*/
+    public Gafas getGafa() {
+        return gafa;
+    }
+
+    public void activarCampos(boolean activar) {
+        jLabelModelo.setEnabled(activar);
+        jLabelMarca.setEnabled(activar);
+        jLabelPrecio.setEnabled(activar);
+        jLabelColor.setEnabled(activar);
+        jLabelGenero.setEnabled(activar);
+        jLabelMaterial.setEnabled(activar);
+        jLabelForma.setEnabled(activar);
+        jLabelTipo.setEnabled(activar);
+        if (activar) {
+            hayCambios = true;
+        }
+    }
+
+    private void aceptar() {
+        aceptado = true;
+        //Si todos los datos que ha introducido el usuario cumplen con
+        //  los tamaños establecidos, se cierra la ventana. En caso contrario,
+        //  se avisa al usuario del problema y se mantiene en la ventana
+                gafa.getIdGafas(); 
+                gafa.setModelo(jLabelModelo.getText());
+                gafa.setMarca(jLabelMarca.getText());
+                gafa.setPrecio(Integer.valueOf(jLabelPrecio.getText()));
+                gafa.setColor(jLabelColor.getText());
+                gafa.setGenero(jLabelGenero.getText());
+                gafa.setMaterial(jLabelMaterial.getText());
+                gafa.setForma(jLabelForma.getText());
+                gafa.setTipo(jLabelTipo.getText());
+        this.setVisible(false);
+
+    }
+
+    public void setGafa(Gafas gafa) {
+        this.gafa = gafa;
+        jLabelModelo.setText(gafa.getModelo());
+        jLabelMarca.setText(gafa.getMarca());
+        jLabelPrecio.setText("" + gafa.getPrecio());
+        jLabelColor.setText(gafa.getColor());
+        jLabelGenero.setText(gafa.genero);
+        jLabelMaterial.setText(gafa.material);
+        jLabelForma.setText(gafa.forma);
+        jLabelTipo.setText(gafa.getTipo());
+    }
+    public boolean isAceptado() {
+        return aceptado;
+    }
+
+    private void cancelar() {
+        this.setVisible(false);
+    }
+
     public Administracion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -45,33 +93,34 @@ public class Administracion extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jLabelTipo = new javax.swing.JLabel();
-        jLabelForma = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabelGenero = new javax.swing.JLabel();
-        jLabelMaterial = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabelPrecio = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabelColor = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabelModelo = new javax.swing.JLabel();
-        jLabelMarca = new javax.swing.JLabel();
+        jLabelModelo = new javax.swing.JTextField();
+        jLabelMarca = new javax.swing.JTextField();
+        jLabelPrecio = new javax.swing.JTextField();
+        jLabelColor = new javax.swing.JTextField();
+        jLabelGenero = new javax.swing.JTextField();
+        jLabelMaterial = new javax.swing.JTextField();
+        jLabelForma = new javax.swing.JTextField();
+        jLabelTipo = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabelTipo.setText("          ");
-
-        jLabelForma.setText("          ");
 
         jLabel8.setText("Tipo:");
 
@@ -83,23 +132,77 @@ public class Administracion extends javax.swing.JDialog {
 
         jLabel4.setText("Color:");
 
-        jLabelGenero.setText("           ");
-
-        jLabelMaterial.setText("           ");
-
         jLabel1.setText("Modelo:");
-
-        jLabelPrecio.setText("          ");
 
         jLabel2.setText("Marca:");
 
-        jLabelColor.setText("          ");
-
         jLabel3.setText("Precio:");
 
-        jLabelModelo.setText("   ");
+        jLabelModelo.setEnabled(false);
+        jLabelModelo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelModeloMouseClicked(evt);
+            }
+        });
+        jLabelModelo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLabelModeloActionPerformed(evt);
+            }
+        });
+        jLabelModelo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabelModeloKeyPressed(evt);
+            }
+        });
 
-        jLabelMarca.setText("          ");
+        jLabelMarca.setEnabled(false);
+        jLabelMarca.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelMarcaMouseClicked(evt);
+            }
+        });
+
+        jLabelPrecio.setEnabled(false);
+        jLabelPrecio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelPrecioMouseClicked(evt);
+            }
+        });
+
+        jLabelColor.setEnabled(false);
+        jLabelColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelColorMouseClicked(evt);
+            }
+        });
+
+        jLabelGenero.setEnabled(false);
+        jLabelGenero.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelGeneroMouseClicked(evt);
+            }
+        });
+
+        jLabelMaterial.setEnabled(false);
+        jLabelMaterial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelMaterialMouseClicked(evt);
+            }
+        });
+
+        jLabelForma.setEnabled(false);
+        jLabelForma.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelFormaMouseClicked(evt);
+            }
+        });
+
+        jLabelTipo.setEnabled(false);
+        jLabelTipo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelTipoMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -111,35 +214,35 @@ public class Administracion extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelForma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabelTipo))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
+                        .addComponent(jLabelPrecio))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelMarca, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabelMarca))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelGenero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabelGenero))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelModelo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabelModelo))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabelColor))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelMaterial))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelForma)))
                 .addGap(3, 3, 3))
         );
         jPanel2Layout.setVerticalGroup(
@@ -148,41 +251,51 @@ public class Administracion extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabelModelo))
+                    .addComponent(jLabelModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabelMarca))
+                    .addComponent(jLabelMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabelPrecio))
+                    .addComponent(jLabelPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabelColor))
+                    .addComponent(jLabelColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabelGenero))
+                    .addComponent(jLabelGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabelMaterial))
+                    .addComponent(jLabelMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabelForma))
+                    .addComponent(jLabelForma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabelTipo))
+                    .addComponent(jLabelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -191,7 +304,7 @@ public class Administracion extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
         );
@@ -228,6 +341,87 @@ public class Administracion extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        cancelar();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        aceptar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jLabelModeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLabelModeloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabelModeloActionPerformed
+
+    private void jLabelModeloKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabelModeloKeyPressed
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelModeloKeyPressed
+
+    private void jLabelModeloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelModeloMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelModeloMouseClicked
+
+    private void jLabelMarcaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMarcaMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelMarcaMouseClicked
+
+    private void jLabelPrecioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelPrecioMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelPrecioMouseClicked
+
+    private void jLabelColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelColorMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelColorMouseClicked
+
+    private void jLabelGeneroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelGeneroMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelGeneroMouseClicked
+
+    private void jLabelMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMaterialMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelMaterialMouseClicked
+
+    private void jLabelFormaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelFormaMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelFormaMouseClicked
+
+    private void jLabelTipoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelTipoMouseClicked
+        // TODO add your handling code here:
+        activarCampos(true);
+    }//GEN-LAST:event_jLabelTipoMouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(hayCambios) {
+            int respuesta = JOptionPane.showConfirmDialog(this, 
+                    "¿Desea guardar los cambios?", 
+                    "Atención", JOptionPane.YES_NO_CANCEL_OPTION, 
+                    JOptionPane.INFORMATION_MESSAGE);
+            switch(respuesta) {
+                case JOptionPane.YES_OPTION:
+                    aceptar();
+                    break;
+                case JOptionPane.NO_OPTION:
+                    cancelar();
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    break;
+            }
+        } else {
+            cancelar();
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -281,14 +475,14 @@ public class Administracion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabelColor;
-    private javax.swing.JLabel jLabelForma;
-    private javax.swing.JLabel jLabelGenero;
-    private javax.swing.JLabel jLabelMarca;
-    private javax.swing.JLabel jLabelMaterial;
-    private javax.swing.JLabel jLabelModelo;
-    private javax.swing.JLabel jLabelPrecio;
-    private javax.swing.JLabel jLabelTipo;
+    private javax.swing.JTextField jLabelColor;
+    private javax.swing.JTextField jLabelForma;
+    private javax.swing.JTextField jLabelGenero;
+    private javax.swing.JTextField jLabelMarca;
+    private javax.swing.JTextField jLabelMaterial;
+    private javax.swing.JTextField jLabelModelo;
+    private javax.swing.JTextField jLabelPrecio;
+    private javax.swing.JTextField jLabelTipo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

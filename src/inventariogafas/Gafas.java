@@ -18,6 +18,8 @@ public class Gafas {
     String forma;
     int idGafas;
     String tipo;
+    Gafas(){
+    }
     
     Gafas(int idGafas, String modelo, String marca, int precio, String color, String genero, String material, String forma, String tipo){
     this.modelo=modelo;

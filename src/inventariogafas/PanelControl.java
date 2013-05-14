@@ -22,8 +22,8 @@ public class PanelControl extends javax.swing.JPanel {
     /**
      * Creates new form PanelControl
      */
-    Gafas gafa;
-    Gafas gafaSeleccionada;
+    Gafas gafa = new Gafas();
+    Gafas gafaSeleccionada = new Gafas();
     Conexion conexion = new Conexion();
     GestionGafas gestion = new GestionGafas();
     DefaultTableModel modeloTabla;
@@ -103,7 +103,54 @@ public class PanelControl extends javax.swing.JPanel {
             jLabelTipo.setText(""); 
         }
     }
-     
+     void Insertar() {
+        Administracion ventana = new Administracion(Frame.getFrames()[0], true);
+        //Crear un nuevo objeto contacto
+        Gafas gafa = new Gafas();
+        //Asignar el contacto obtenido a la ventana de diálogo
+        ventana.setGafa(gafa);
+        //Mostar la ventana con los campos de edición activados
+        ventana.activarCampos(true);
+        ventana.setVisible(true);
+        //Liberar la memoria de pantalla ocupada por la ventana de detalle
+        //Comprobar si se ha pulsado Aceptar o Cancelar 
+        if(ventana.isAceptado()) {
+            //Añadir el contacto en la BD
+            gestion.insert(gafa);        
+            //Actualiza los datos en la tabla de la ventana
+            CargarDatosJTable();
+        } 
+    }
+     void editar() {
+        //Obtener número de fila seleccionada en el JTable
+        int numFilaSelec = jTable1.getSelectedRow();
+        //Comprobar que el usuario ha seleccionado alguna fila
+        if(numFilaSelec!=-1) {
+            Administracion ventana = new Administracion(Frame.getFrames()[0], true);
+            //Obtener el contacto correspondiente a la fila seleccionada
+            Gafas gafa = gestion.selecGafaById(
+                    Integer.valueOf((String)modeloTabla.getValueAt(numFilaSelec, 0)));
+            //Asignar el contacto obtenido a la ventana de diálogo
+            ventana.setGafa(gafa);
+            //Mostar la ventana con los detalles del contacto desactivados
+            ventana.activarCampos(false);
+            ventana.setVisible(true);
+            //Liberar la memoria de pantalla ocupada por la ventana de detalle
+            ventana.dispose();
+            //Comprobar si se ha pulsado Aceptar o Cancelar 
+            if(ventana.isAceptado()) {
+                //Guardar el contacto en la BD
+                gestion.update(gafa);   
+                //Actualiza los datos en la tabla de la ventana
+                CargarDatosJTable();
+            } 
+        } else {
+            //Si no se ha seleccionado un contacto de la lista hay que notificarlo
+            JOptionPane.showMessageDialog(this, 
+                    "Debe seleccionar un contacto previamente", 
+                    "Atención", JOptionPane.WARNING_MESSAGE);
+        }
+    }
     
 
     public PanelControl() {
@@ -423,7 +470,7 @@ public class PanelControl extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -439,33 +486,21 @@ public class PanelControl extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-            int numFilaSelec = jTable1.getSelectedRow();
-            Gafas gafaSeleccionada = gestion.selecGafaById(
-                    Integer.valueOf((String)modeloTabla.getValueAt(numFilaSelec, 0)));
-            gestion.setGafaByGafa(gafaSeleccionada);
-            this.ventana.setVisible(true);
+        editar();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        int numFilaSelec = jTable1.getSelectedRow();
-            Gafas gafaSeleccionada = gestion.selecGafaById(
-                    Integer.valueOf((String)modeloTabla.getValueAt(numFilaSelec, 0)));
-            gestion.setGafaByGafa(gafaSeleccionada);
-        this.ventana.setVisible(true);
-       
+        Insertar();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el articulo seleccionado?", "Atención", JOptionPane.OK_CANCEL_OPTION);
         if (respuesta == JOptionPane.OK_OPTION) {
-            int numero = jTable1.getSelectedRow();
-            for (int i = 0; i < gestion.selecGafas().size(); i++) {
-                if (numero == i) {
-                    gafaSeleccionada = gestion.selecGafaById(i);
-                }
-            }
+            int numFilaSelec = jTable1.getSelectedRow();
+            Gafas gafaSeleccionada = gestion.selecGafaById(
+                    Integer.valueOf((String)modeloTabla.getValueAt(numFilaSelec, 0)));
             gestion.delete(gafaSeleccionada);
         }
         if (respuesta == JOptionPane.CANCEL_OPTION) {
