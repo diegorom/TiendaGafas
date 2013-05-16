@@ -27,83 +27,85 @@ public class PanelControl extends javax.swing.JPanel {
     Conexion conexion = new Conexion();
     GestionGafas gestion = new GestionGafas();
     DefaultTableModel modeloTabla;
-    Administracion ventana = new Administracion(Frame.getFrames()[0],true);
-    
+    Administracion ventana = new Administracion(Frame.getFrames()[0], true);
+
     void CargarDatosJTable() {
-        gestion.selecGafas(); 
+        gestion.selecGafas();
         ArrayList<Gafas> listaGafas = new ArrayList();
         modeloTabla = new DefaultTableModel() {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
-            }                
+            }
         };
         jTable1.setModel(modeloTabla);
 
         //Rellenar las cabeceras de las columnas
-        String[] cabecera = {"IdGafas","Modelo","Marca","Precio","Color","Genero","Material","Forma","Tipo"};
+        String[] cabecera = {"IdGafas", "Modelo", "Marca", "Precio", "Color", "Genero", "Material", "Forma", "Tipo"};
         modeloTabla.setColumnIdentifiers(cabecera);
 
-        listaGafas = gestion.selecGafas(); 
+        listaGafas = gestion.selecGafas();
         //Recorrer la lista de contactos para añadir algunos datos en el JTable
-        for (Gafas nueva :listaGafas) {
+        for (Gafas nueva : listaGafas) {
             //Se va mostrar sólo el nombre y los apellidos
             String[] datosFilaContacto = {
-                String.valueOf(nueva.getIdGafas()), 
+                String.valueOf(nueva.getIdGafas()),
                 nueva.getModelo(),
                 nueva.getMarca(),
-                String.valueOf(nueva.getPrecio()), 
+                String.valueOf(nueva.getPrecio()),
                 nueva.getColor(),
                 nueva.getGenero(),
                 nueva.getMaterial(),
                 nueva.getForma(),
                 nueva.getTipo()};
             modeloTabla.addRow(datosFilaContacto);
-        }        
+        }
 
         //Establecer que sólo se pueda seleccionar una fila
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
+
         //Ocultar columna de idContacto
         TableColumn tc = jTable1.getColumn("IdGafas");
         jTable1.removeColumn(tc);
-        
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(200);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(200);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(200);
-            jTable1.getColumnModel().getColumn(6).setPreferredWidth(200);
-            jTable1.getColumnModel().getColumn(7).setPreferredWidth(200);     
+
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(4).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(5).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(6).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(7).setPreferredWidth(200);
     }
-     void mostrarDatosContacto() {
+
+    void mostrarDatosContacto() {
         //Obtener número de fila seleccionada en el JTable
         int numFilaSelec = jTable1.getSelectedRow();
         //Comprobar que el usuario ha seleccionado alguna fila
-        if(numFilaSelec!=-1) {
+        if (numFilaSelec != -1) {
             //Obtener el contacto correspondiente a la fila seleccionada
             Gafas gafa = gestion.selecGafaById(
-                    Integer.valueOf((String)modeloTabla.getValueAt(numFilaSelec, 0)));
+                    Integer.valueOf((String) modeloTabla.getValueAt(numFilaSelec, 0)));
             jLabelModelo.setText(gafa.getModelo());
             jLabelMarca.setText(gafa.getMarca());
-            jLabelPrecio.setText(""+gafa.getPrecio());
-            jLabelColor.setText(gafa.getColor()); 
-            jLabelGenero.setText(gafa.genero); 
-            jLabelMaterial.setText(gafa.material); 
-            jLabelForma.setText(gafa.forma); 
-            jLabelTipo.setText(gafa.getTipo()); 
+            jLabelPrecio.setText("" + gafa.getPrecio());
+            jLabelColor.setText(gafa.getColor());
+            jLabelGenero.setText(gafa.genero);
+            jLabelMaterial.setText(gafa.material);
+            jLabelForma.setText(gafa.forma);
+            jLabelTipo.setText(gafa.getTipo());
         } else {
-             jLabelModelo.setText("");
+            jLabelModelo.setText("");
             jLabelMarca.setText("");
             jLabelPrecio.setText("");
-            jLabelColor.setText(""); 
-            jLabelGenero.setText(""); 
-            jLabelMaterial.setText(""); 
-            jLabelForma.setText(""); 
-            jLabelTipo.setText(""); 
+            jLabelColor.setText("");
+            jLabelGenero.setText("");
+            jLabelMaterial.setText("");
+            jLabelForma.setText("");
+            jLabelTipo.setText("");
         }
     }
-     void Insertar() {
+
+    void Insertar() {
         Administracion ventana = new Administracion(Frame.getFrames()[0], true);
         //Crear un nuevo objeto contacto
         Gafas gafa = new Gafas();
@@ -114,22 +116,23 @@ public class PanelControl extends javax.swing.JPanel {
         ventana.setVisible(true);
         //Liberar la memoria de pantalla ocupada por la ventana de detalle
         //Comprobar si se ha pulsado Aceptar o Cancelar 
-        if(ventana.isAceptado()) {
+        if (ventana.isAceptado()) {
             //Añadir el contacto en la BD
-            gestion.insert(gafa);        
+            gestion.insert(gafa);
             //Actualiza los datos en la tabla de la ventana
             CargarDatosJTable();
-        } 
+        }
     }
-     void editar() {
+
+    void editar() {
         //Obtener número de fila seleccionada en el JTable
         int numFilaSelec = jTable1.getSelectedRow();
         //Comprobar que el usuario ha seleccionado alguna fila
-        if(numFilaSelec!=-1) {
+        if (numFilaSelec != -1) {
             Administracion ventana = new Administracion(Frame.getFrames()[0], true);
             //Obtener el contacto correspondiente a la fila seleccionada
             Gafas gafa = gestion.selecGafaById(
-                    Integer.valueOf((String)modeloTabla.getValueAt(numFilaSelec, 0)));
+                    Integer.valueOf((String) modeloTabla.getValueAt(numFilaSelec, 0)));
             //Asignar el contacto obtenido a la ventana de diálogo
             ventana.setGafa(gafa);
             //Mostar la ventana con los detalles del contacto desactivados
@@ -138,20 +141,19 @@ public class PanelControl extends javax.swing.JPanel {
             //Liberar la memoria de pantalla ocupada por la ventana de detalle
             ventana.dispose();
             //Comprobar si se ha pulsado Aceptar o Cancelar 
-            if(ventana.isAceptado()) {
+            if (ventana.isAceptado()) {
                 //Guardar el contacto en la BD
-                gestion.update(gafa);   
+                gestion.update(gafa);
                 //Actualiza los datos en la tabla de la ventana
                 CargarDatosJTable();
-            } 
+            }
         } else {
             //Si no se ha seleccionado un contacto de la lista hay que notificarlo
-            JOptionPane.showMessageDialog(this, 
-                    "Debe seleccionar un contacto previamente", 
+            JOptionPane.showMessageDialog(this,
+                    "Debe seleccionar un contacto previamente",
                     "Atención", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
 
     public PanelControl() {
         initComponents();
@@ -160,8 +162,6 @@ public class PanelControl extends javax.swing.JPanel {
             this.CargarDatosJTable();
         }
     }
-   
-        
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -500,7 +500,7 @@ public class PanelControl extends javax.swing.JPanel {
         if (respuesta == JOptionPane.OK_OPTION) {
             int numFilaSelec = jTable1.getSelectedRow();
             Gafas gafaSeleccionada = gestion.selecGafaById(
-                    Integer.valueOf((String)modeloTabla.getValueAt(numFilaSelec, 0)));
+                    Integer.valueOf((String) modeloTabla.getValueAt(numFilaSelec, 0)));
             gestion.delete(gafaSeleccionada);
         }
         if (respuesta == JOptionPane.CANCEL_OPTION) {
@@ -508,7 +508,6 @@ public class PanelControl extends javax.swing.JPanel {
         }
         this.mostrarDatosContacto();
     }//GEN-LAST:event_jButton3ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

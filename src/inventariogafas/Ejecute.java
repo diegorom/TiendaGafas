@@ -13,7 +13,6 @@ public class Ejecute extends javax.swing.JFrame {
     /**
      * Creates new form Ejecute
      */
-    
     public Ejecute() {
         initComponents();
     }

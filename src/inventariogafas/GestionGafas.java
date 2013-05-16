@@ -16,14 +16,16 @@ import java.util.logging.Logger;
  * @author diego
  */
 public class GestionGafas {
-    Gafas gafa;
-    Conexion conexion;
-    
-    boolean delete(Gafas gafa){
-        this.gafa=gafa;
+
+    Gafas gafa = new Gafas();
+    Conexion conexion = new Conexion();
+    Tipo tipo = new Tipo();
+
+    boolean delete(Gafas gafa) {
+        this.gafa = gafa;
         try {
             Statement stmt = Conexion.conexion.createStatement();
-            String sql = "DELETE FROM gafas WHERE id_gafas="+gafa.getIdGafas();
+            String sql = "DELETE FROM gafas WHERE id_gafas=" + gafa.getIdGafas();
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(GestionGafas.class.getName()).log(Level.SEVERE, null, ex);
@@ -32,13 +34,13 @@ public class GestionGafas {
             return false;
         }
         return true;
-    }   
-    
+    }
+
     public boolean update(Gafas gafa) {
         try {
-            
+
             Statement stmt = Conexion.conexion.createStatement();
-            String sql = "UPDATE gafas SET " 
+            String sql = "UPDATE gafas SET "
                     + "modelo = '" + gafa.getModelo() + "', "
                     + "marca = '" + gafa.getMarca() + "', "
                     + "precio = " + gafa.getPrecio() + ", "
@@ -46,7 +48,7 @@ public class GestionGafas {
                     + "genero = '" + gafa.getGenero() + "', "
                     + "material = '" + gafa.getMaterial() + "', "
                     + "forma = '" + gafa.getForma() + "', "
-                    + "tipo = '" + gafa.getTipo() + "' "
+                    + "id_tipo = '" + gafa.getTipo() + "' "
                     + "WHERE id_gafas = " + gafa.getIdGafas();
             stmt.executeUpdate(sql);
 
@@ -58,12 +60,12 @@ public class GestionGafas {
         }
         return true;
     }
-    
+
     public boolean insert(Gafas gafa) {
         try {
-            
+
             Statement stmt = Conexion.conexion.createStatement();
-            String sql = "INSERT INTO gafas (id_gafas,modelo,marca,precio,color,genero,material,forma,tipo) VALUES " + "("+gafa.getIdGafas()+",'"+gafa.getModelo()+"','"+gafa.getMarca()+"',"+gafa.getPrecio()+",'"+gafa.getColor()+"','"+gafa.getGenero()+"','"+gafa.getMaterial()+"','"+gafa.getForma()+"','"+gafa.getTipo()+"')";
+            String sql = "INSERT INTO gafas (id_gafas,modelo,marca,precio,color,genero,material,forma,id_tipo) VALUES " + "(" + gafa.getIdGafas() + ",'" + gafa.getModelo() + "','" + gafa.getMarca() + "'," + gafa.getPrecio() + ",'" + gafa.getColor() + "','" + gafa.getGenero() + "','" + gafa.getMaterial() + "','" + gafa.getForma() + "','" + gafa.getTipo() + "')";
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(GestionGafas.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,11 +75,12 @@ public class GestionGafas {
         }
         return true;
     }
+
     public ArrayList<Gafas> selecGafas() {
         ArrayList<Gafas> gafas = new ArrayList();
         try {
             Statement stmt = Conexion.conexion.createStatement();
-            String sql = "SELECT id_gafas,modelo,marca,precio,color,genero,material,forma,tipo FROM gafas";
+            String sql = "SELECT id_gafas,modelo,marca,precio,color,genero,material,forma,id_tipo FROM gafas";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 int idGafas = rs.getInt("id_gafas");
@@ -88,8 +91,8 @@ public class GestionGafas {
                 String genero = rs.getString("genero");
                 String material = rs.getString("material");
                 String forma = rs.getString("forma");
-                String tipo = rs.getString("tipo");
-                Gafas NewGafa = new Gafas(idGafas,modelo,marca,precio,color,genero,material,forma,tipo);
+                String tipo = rs.getString("id_tipo");
+                Gafas NewGafa = new Gafas(idGafas, modelo, marca, precio, color, genero, material, forma, tipo);
                 gafas.add(NewGafa);
             }
         } catch (SQLException ex) {
@@ -98,6 +101,7 @@ public class GestionGafas {
         }
         return gafas;
     }
+
     public ArrayList<String> selecMarca() {
         ArrayList<String> marca = new ArrayList();
         try {
@@ -114,11 +118,12 @@ public class GestionGafas {
         }
         return marca;
     }
-        public Gafas selecGafaById(int id) {
+
+    public Gafas selecGafaById(int id) {
         Gafas NewGafa = null;
         try {
             Statement stmt = Conexion.conexion.createStatement();
-            String sql = "SELECT * FROM gafas where id_gafas="+id;
+            String sql = "SELECT * FROM gafas where id_gafas=" + id;
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 int idGafas = rs.getInt("id_gafas");
@@ -129,8 +134,8 @@ public class GestionGafas {
                 String genero = rs.getString("genero");
                 String material = rs.getString("material");
                 String forma = rs.getString("forma");
-                String tipo = rs.getString("tipo");
-                NewGafa = new Gafas(idGafas,modelo,marca,precio,color,genero,material,forma,tipo);
+                String tipo = rs.getString("id_tipo");
+                NewGafa = new Gafas(idGafas, modelo, marca, precio, color, genero, material, forma, tipo);
             }
         } catch (SQLException ex) {
             System.out.println("Error al consultar la base de datos");
@@ -138,11 +143,4 @@ public class GestionGafas {
         }
         return NewGafa;
     }
-        void setGafaByGafa(Gafas gafa){
-        }
-        
-        public Gafas getGafaByGafa(){
-            return gafa;
-        }
-        
 }

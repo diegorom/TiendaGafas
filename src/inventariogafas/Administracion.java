@@ -4,6 +4,9 @@
  */
 package inventariogafas;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -19,8 +22,12 @@ public class Administracion extends javax.swing.JDialog {
     JPanel PanelControl = new JPanel();
     GestionGafas gestion = new GestionGafas();
     Gafas gafa = new Gafas();
+    Tipo tipo = new Tipo();
+    GestionTipo gestionTipo = new GestionTipo();
+    Conexion conexion = new Conexion();
     private boolean hayCambios = false;
     private boolean aceptado = false;
+    String tipoSelecionado;
 
     public Gafas getGafa() {
         return gafa;
@@ -34,7 +41,7 @@ public class Administracion extends javax.swing.JDialog {
         jLabelGenero.setEnabled(activar);
         jLabelMaterial.setEnabled(activar);
         jLabelForma.setEnabled(activar);
-        jLabelTipo.setEnabled(activar);
+        //jLabelTipo.setEnabled(activar);
         if (activar) {
             hayCambios = true;
         }
@@ -45,15 +52,15 @@ public class Administracion extends javax.swing.JDialog {
         //Si todos los datos que ha introducido el usuario cumplen con
         //  los tamaños establecidos, se cierra la ventana. En caso contrario,
         //  se avisa al usuario del problema y se mantiene en la ventana
-                gafa.getIdGafas(); 
-                gafa.setModelo(jLabelModelo.getText());
-                gafa.setMarca(jLabelMarca.getText());
-                gafa.setPrecio(Integer.valueOf(jLabelPrecio.getText()));
-                gafa.setColor(jLabelColor.getText());
-                gafa.setGenero(jLabelGenero.getText());
-                gafa.setMaterial(jLabelMaterial.getText());
-                gafa.setForma(jLabelForma.getText());
-                gafa.setTipo(jLabelTipo.getText());
+        gafa.getIdGafas();
+        gafa.setModelo(jLabelModelo.getText());
+        gafa.setMarca(jLabelMarca.getText());
+        gafa.setPrecio(Integer.valueOf(jLabelPrecio.getText()));
+        gafa.setColor(jLabelColor.getText());
+        gafa.setGenero(jLabelGenero.getText());
+        gafa.setMaterial(jLabelMaterial.getText());
+        gafa.setForma(jLabelForma.getText());
+        gafa.setTipo(tipoSelecionado);
         this.setVisible(false);
 
     }
@@ -67,8 +74,9 @@ public class Administracion extends javax.swing.JDialog {
         jLabelGenero.setText(gafa.genero);
         jLabelMaterial.setText(gafa.material);
         jLabelForma.setText(gafa.forma);
-        jLabelTipo.setText(gafa.getTipo());
+        //jLabelTipo.setText(gafa.getTipo());
     }
+
     public boolean isAceptado() {
         return aceptado;
     }
@@ -80,6 +88,20 @@ public class Administracion extends javax.swing.JDialog {
     public Administracion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        conexion.conectar("localhost", "root", "");
+        int nuevo=0;        
+        int numElementos = gestionTipo.selecTipo().size();
+        String[] arrayParaJComboBox = new String[numElementos];
+        gestionTipo.selecTipo().toArray(arrayParaJComboBox);
+        ComboBoxModel c = new DefaultComboBoxModel(arrayParaJComboBox);
+        jComboBox1.setModel(c);
+        for (int i = 0; i < gestionTipo.selecTipo().size(); i++) {
+            nuevo = (gestionTipo.selecTipo().get(i).idTipo=tipo.idTipo);
+        }
+        jComboBox1.setSelectedIndex(nuevo);
+   
+        tipoSelecionado = jComboBox1.getSelectedItem().toString();
         /*this.mostrarDatosContacto();*/
     }
 
@@ -108,7 +130,7 @@ public class Administracion extends javax.swing.JDialog {
         jLabelGenero = new javax.swing.JTextField();
         jLabelMaterial = new javax.swing.JTextField();
         jLabelForma = new javax.swing.JTextField();
-        jLabelTipo = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -197,10 +219,10 @@ public class Administracion extends javax.swing.JDialog {
             }
         });
 
-        jLabelTipo.setEnabled(false);
-        jLabelTipo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabelTipoMouseClicked(evt);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
             }
         });
 
@@ -211,10 +233,6 @@ public class Administracion extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelTipo))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -230,7 +248,7 @@ public class Administracion extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelModelo))
+                        .addComponent(jLabelModelo, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -240,9 +258,13 @@ public class Administracion extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelMaterial))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelForma)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelForma)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(3, 3, 3))
         );
         jPanel2Layout.setVerticalGroup(
@@ -279,8 +301,8 @@ public class Administracion extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jButton1.setText("Guardar");
@@ -396,19 +418,14 @@ public class Administracion extends javax.swing.JDialog {
         activarCampos(true);
     }//GEN-LAST:event_jLabelFormaMouseClicked
 
-    private void jLabelTipoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelTipoMouseClicked
-        // TODO add your handling code here:
-        activarCampos(true);
-    }//GEN-LAST:event_jLabelTipoMouseClicked
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        if(hayCambios) {
-            int respuesta = JOptionPane.showConfirmDialog(this, 
-                    "¿Desea guardar los cambios?", 
-                    "Atención", JOptionPane.YES_NO_CANCEL_OPTION, 
+        if (hayCambios) {
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "¿Desea guardar los cambios?",
+                    "Atención", JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.INFORMATION_MESSAGE);
-            switch(respuesta) {
+            switch (respuesta) {
                 case JOptionPane.YES_OPTION:
                     aceptar();
                     break;
@@ -422,6 +439,10 @@ public class Administracion extends javax.swing.JDialog {
             cancelar();
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -467,6 +488,7 @@ public class Administracion extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -482,7 +504,6 @@ public class Administracion extends javax.swing.JDialog {
     private javax.swing.JTextField jLabelMaterial;
     private javax.swing.JTextField jLabelModelo;
     private javax.swing.JTextField jLabelPrecio;
-    private javax.swing.JTextField jLabelTipo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

@@ -9,28 +9,30 @@ package inventariogafas;
  * @author diego
  */
 public class Gafas {
+
     String modelo;
-    String marca; 
-    int precio; 
+    String marca;
+    int precio;
     String color;
     String genero;
     String material;
     String forma;
     int idGafas;
     String tipo;
-    Gafas(){
+
+    Gafas() {
     }
-    
-    Gafas(int idGafas, String modelo, String marca, int precio, String color, String genero, String material, String forma, String tipo){
-    this.modelo=modelo;
-    this.marca=marca; 
-    this.precio=precio; 
-    this.color=color;
-    this.genero=genero;
-    this.material=material;
-    this.forma=forma;
-    this.idGafas=idGafas;
-    this.tipo=tipo;
+
+    Gafas(int idGafas, String modelo, String marca, int precio, String color, String genero, String material, String forma, String tipo) {
+        this.modelo = modelo;
+        this.marca = marca;
+        this.precio = precio;
+        this.color = color;
+        this.genero = genero;
+        this.material = material;
+        this.forma = forma;
+        this.idGafas = idGafas;
+        this.tipo = tipo;
     }
 
     public String getTipo() {
@@ -104,6 +106,4 @@ public class Gafas {
     public void setForma(String forma) {
         this.forma = forma;
     }
-    
 }
-
