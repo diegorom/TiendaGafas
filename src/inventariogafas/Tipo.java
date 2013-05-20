@@ -36,4 +36,7 @@ public class Tipo {
     public void setSolarGraduada(String solarGraduada) {
         this.solarGraduada = solarGraduada;
     }
+    public String toString() {
+        return  solarGraduada;
+    }
 }

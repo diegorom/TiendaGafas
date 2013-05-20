@@ -56,7 +56,7 @@ public class PanelControl extends javax.swing.JPanel {
                 nueva.getGenero(),
                 nueva.getMaterial(),
                 nueva.getForma(),
-                nueva.getTipo()};
+                String.valueOf(nueva.getTipo())};
             modeloTabla.addRow(datosFilaContacto);
         }
 
@@ -92,7 +92,7 @@ public class PanelControl extends javax.swing.JPanel {
             jLabelGenero.setText(gafa.genero);
             jLabelMaterial.setText(gafa.material);
             jLabelForma.setText(gafa.forma);
-            jLabelTipo.setText(gafa.getTipo());
+            jLabelTipo.setText(""+gafa.getTipo());
         } else {
             jLabelModelo.setText("");
             jLabelMarca.setText("");
@@ -121,6 +121,7 @@ public class PanelControl extends javax.swing.JPanel {
             gestion.insert(gafa);
             //Actualiza los datos en la tabla de la ventana
             CargarDatosJTable();
+            mostrarDatosContacto();
         }
     }
 

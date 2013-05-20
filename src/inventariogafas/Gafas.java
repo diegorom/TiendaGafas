@@ -18,12 +18,12 @@ public class Gafas {
     String material;
     String forma;
     int idGafas;
-    String tipo;
+    int tipo;
 
     Gafas() {
     }
 
-    Gafas(int idGafas, String modelo, String marca, int precio, String color, String genero, String material, String forma, String tipo) {
+    Gafas(int idGafas, String modelo, String marca, int precio, String color, String genero, String material, String forma, int tipo) {
         this.modelo = modelo;
         this.marca = marca;
         this.precio = precio;
@@ -35,11 +35,11 @@ public class Gafas {
         this.tipo = tipo;
     }
 
-    public String getTipo() {
+    public int getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(int tipo) {
         this.tipo = tipo;
     }
 

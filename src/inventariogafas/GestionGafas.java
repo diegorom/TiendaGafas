@@ -91,7 +91,7 @@ public class GestionGafas {
                 String genero = rs.getString("genero");
                 String material = rs.getString("material");
                 String forma = rs.getString("forma");
-                String tipo = rs.getString("id_tipo");
+                int tipo = rs.getInt("id_tipo");
                 Gafas NewGafa = new Gafas(idGafas, modelo, marca, precio, color, genero, material, forma, tipo);
                 gafas.add(NewGafa);
             }
@@ -134,7 +134,7 @@ public class GestionGafas {
                 String genero = rs.getString("genero");
                 String material = rs.getString("material");
                 String forma = rs.getString("forma");
-                String tipo = rs.getString("id_tipo");
+                int tipo = rs.getInt("id_tipo");
                 NewGafa = new Gafas(idGafas, modelo, marca, precio, color, genero, material, forma, tipo);
             }
         } catch (SQLException ex) {

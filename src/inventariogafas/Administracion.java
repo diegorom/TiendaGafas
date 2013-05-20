@@ -60,7 +60,7 @@ public class Administracion extends javax.swing.JDialog {
         gafa.setGenero(jLabelGenero.getText());
         gafa.setMaterial(jLabelMaterial.getText());
         gafa.setForma(jLabelForma.getText());
-        gafa.setTipo(tipoSelecionado);
+        gafa.setTipo(Integer.valueOf(tipoSelecionado));
         this.setVisible(false);
 
     }
@@ -88,18 +88,20 @@ public class Administracion extends javax.swing.JDialog {
     public Administracion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
         conexion.conectar("localhost", "root", "");
-        int nuevo=0;        
+         
         int numElementos = gestionTipo.selecTipo().size();
-        String[] arrayParaJComboBox = new String[numElementos];
+        Tipo[] arrayParaJComboBox = new Tipo[numElementos];
         gestionTipo.selecTipo().toArray(arrayParaJComboBox);
         ComboBoxModel c = new DefaultComboBoxModel(arrayParaJComboBox);
         jComboBox1.setModel(c);
         for (int i = 0; i < gestionTipo.selecTipo().size(); i++) {
-            nuevo = (gestionTipo.selecTipo().get(i).idTipo=tipo.idTipo);
+            if(gestionTipo.selecTipo().get(i).getIdTipo()==gafa.getIdGafas()){
+                jComboBox1.setSelectedIndex(i);
+ 
+            }   
         }
-        jComboBox1.setSelectedIndex(nuevo);
+        //jComboBox1.setSelectedIndex(nuevo);
    
         tipoSelecionado = jComboBox1.getSelectedItem().toString();
         /*this.mostrarDatosContacto();*/
