@@ -41,4 +41,22 @@ public class GestionTipo {
         return tipo.solarGraduada;
 
     }
+    public Tipo getTipoById(int id_tipo) {
+        Tipo tipo = null;
+        try {
+
+            String sql = "SELECT * FROM tipo where id_tipo =" + id_tipo;
+            Statement stmt = Conexion.conexion.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                int idTipo = rs.getInt("id_tipo");
+                String solarGraduada = rs.getString("solarGraduada");
+               tipo  = new Tipo(idTipo, solarGraduada);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al consultar la base de datos");
+            ex.printStackTrace();
+        }
+        return tipo;
+    }
 }

@@ -26,8 +26,22 @@ public class PanelControl extends javax.swing.JPanel {
     Gafas gafaSeleccionada = new Gafas();
     Conexion conexion = new Conexion();
     GestionGafas gestion = new GestionGafas();
+    GestionTipo gestionTipo = new GestionTipo();
     DefaultTableModel modeloTabla;
     Administracion ventana = new Administracion(Frame.getFrames()[0], true);
+
+    public int mostrarIdGafas() {
+        for (int i = 0; i < gestionTipo.selecTipo().size(); i++) {
+
+            int id_tipo = gestionTipo.selecTipo().get(i).getIdTipo();
+            int id_TipoGafa = gafa.getIdGafas();
+
+            if (id_tipo == id_TipoGafa) {
+                return gestionTipo.selecTipo().get(i).getIdTipo();
+            }
+        }
+        return 0;
+    }
 
     void CargarDatosJTable() {
         gestion.selecGafas();
@@ -92,7 +106,7 @@ public class PanelControl extends javax.swing.JPanel {
             jLabelGenero.setText(gafa.genero);
             jLabelMaterial.setText(gafa.material);
             jLabelForma.setText(gafa.forma);
-            jLabelTipo.setText(""+gafa.getTipo());
+            jLabelTipo.setText("" + gafa.getTipo());
         } else {
             jLabelModelo.setText("");
             jLabelMarca.setText("");

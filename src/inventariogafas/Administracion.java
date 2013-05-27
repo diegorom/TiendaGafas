@@ -75,6 +75,7 @@ public class Administracion extends javax.swing.JDialog {
         jLabelMaterial.setText(gafa.material);
         jLabelForma.setText(gafa.forma);
         //jLabelTipo.setText(gafa.getTipo());
+        this.listaTipo();
     }
 
     public boolean isAceptado() {
@@ -84,27 +85,33 @@ public class Administracion extends javax.swing.JDialog {
     private void cancelar() {
         this.setVisible(false);
     }
-
-    public Administracion(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-        conexion.conectar("localhost", "root", "");
-         
+    
+    public void listaTipo(){
         int numElementos = gestionTipo.selecTipo().size();
         Tipo[] arrayParaJComboBox = new Tipo[numElementos];
         gestionTipo.selecTipo().toArray(arrayParaJComboBox);
         ComboBoxModel c = new DefaultComboBoxModel(arrayParaJComboBox);
         jComboBox1.setModel(c);
         for (int i = 0; i < gestionTipo.selecTipo().size(); i++) {
-            if(gestionTipo.selecTipo().get(i).getIdTipo()==gafa.getIdGafas()){
+
+            int id_tipo = gestionTipo.selecTipo().get(i).getIdTipo();
+            int id_TipoGafa = gafa.getIdGafas();
+            if (id_tipo == id_TipoGafa) {
                 jComboBox1.setSelectedIndex(i);
- 
-            }   
+            }
+
+            tipoSelecionado = jComboBox1.getSelectedItem().toString();
+            /*this.mostrarDatosContacto();*/
         }
-        //jComboBox1.setSelectedIndex(nuevo);
-   
-        tipoSelecionado = jComboBox1.getSelectedItem().toString();
-        /*this.mostrarDatosContacto();*/
+    }
+
+    public Administracion(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        conexion.conectar("localhost", "root", "");
+    /**
+     *
+     */
     }
 
     /**

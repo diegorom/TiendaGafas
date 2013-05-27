@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -65,7 +66,7 @@ public class UtilBlob {
      * @param jLabel JLabel en el que se mostrará la imagen, al que previamente se
      * le habrá dado el tamaño máximo que se usará para mostrar la imagen
      */
-    /*
+    
     public static void BlobToJLabel(Blob blob, JLabel jLabel) {
         try {
             ImageIcon imageIcon = new ImageIcon(blob.getBytes(1L, (int)blob.length()));
@@ -73,13 +74,11 @@ public class UtilBlob {
             double escalaY = (double)jLabel.getHeight() / imageIcon.getIconHeight();
             double escalaMin = Math.min(escalaX, escalaY);
             Image image = imageIcon.getImage(); 
-            if(escalaMin&lt;1) {
+            if(escalaMin<1) {
                 //Si la imagen es más grande que el JPanel, escalar la imagen proporcionalmente
                 Image newimg = image.getScaledInstance((int)(imageIcon.getIconWidth() * escalaMin), (int) (imageIcon.getIconHeight() * escalaMin), java.awt.Image.SCALE_SMOOTH);  
                 imageIcon = new ImageIcon(newimg);   
-            } catch (SQLException ex) {
-            Logger.getLogger(UtilBlob.class.getName()).log(Level.SEVERE, null, ex);
-         else {
+            } else {
                 //Si la imagen es más pequeña que el JPanel, no agrandar
                 Image newimg = image.getScaledInstance((int)(imageIcon.getIconWidth()), (int) (imageIcon.getIconHeight()), java.awt.Image.SCALE_SMOOTH);  
                 imageIcon = new ImageIcon(newimg);   
@@ -88,6 +87,39 @@ public class UtilBlob {
         } catch (SQLException ex) {
             Logger.getLogger(UtilBlob.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }*/
+    }
      
+/**
+     * Convierte un archivo de imagen al tipo Blob utilizado
+     * en las bases de datos, con el fin de tratarlo como una imagen.
+     * Para almacenar el Blob en la base de datos se debe usar PreparedStatement
+     * de manera similar a la siguiente:
+     * PreparedStatement pstmt = Conexion.conexion.prepareStatement("UPDATE tabla SET campoBlob = ? WHERE condicion=valor");
+     * pstmt.setBlob(1, variableQueContieneElBlob);
+     * pstmt.execute();
+     * @param file File que contiene la imagen en cualquier de los formatos más comunes: gif, png, jpeg, etc.
+     * @return Blob con el contenido del panel que se ha pasado por parámetro
+     */
+    public static Blob FileToBlob(File file) {
+        try {
+            BufferedImage bufferedImage = ImageIO.read(file);
+            Graphics2D g2 = bufferedImage.createGraphics();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", baos);
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            Blob blob = new SerialBlob(imageInByte);
+            return blob;
+        } catch (SerialException ex) {
+            Logger.getLogger(UtilBlob.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (SQLException ex) {
+            Logger.getLogger(UtilBlob.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (IOException ex) {
+            Logger.getLogger(UtilBlob.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 }
